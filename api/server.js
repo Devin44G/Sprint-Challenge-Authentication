@@ -29,9 +29,7 @@ const server = express();
       server.use('/api/jokes', authenticate, jokesRouter);
 
 server.get('/', (req, res) => {
-  res.send(`
-    <h2>Welcome to the last sprint in the Node Unit!</h2>
-  `)
+  res.status(200).json({ statusReport: "all systems a go"});
 });
 
 module.exports = server;
