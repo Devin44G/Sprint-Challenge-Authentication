@@ -1,16 +1,23 @@
 const request = require("supertest");
 const server = require("../api/server.js");
 
-let num1 = Math.random * 1000;
-let num2 = Math.random * 500;
+function numGenerator() {
+  let num = Math.random() * 1000;
+  return num;
+}
 
 const testUser = {
-  username: `testUser.${num1}${num2}`,
+  username: `testUser.${numGenerator()}`,
   password: 'pass'
 };
 
 const registeredUser = {
   username: 'Gerald',
+  password: 'gerry'
+};
+
+const invalidUser = {
+  username: 'Geraldzzz',
   password: 'gerry'
 };
 
@@ -35,8 +42,21 @@ describe('auth-router.js', () => {
   });
 // LOGIN && JOKES TESTS
   describe('login endpoint', () => {
-    it('should ', () => {
-
+    it('should return 401 when invalid credentials given', () => {
+      return request(server)
+        .post('/api/auth/login')
+        .send(invalidUser)
+        .then(res => {
+          expect(res.status).toBe(401);
+        });
+    });
+    it('should return token when user logs in', () => {
+      return request(server)
+        .post('/api/auth/login')
+        .send(registeredUser)
+        .then(res => {
+          expect(res.body).toHaveProperty("token");
+        });
     });
   });
 });
