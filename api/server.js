@@ -30,7 +30,7 @@ const server = express();
 
 server.get('/', (req, res) => {
   res.send(`
-    <h2>Welcome to the server!</h2>
+    <h2>Welcome to the last sprint in the Node Unit!</h2>
   `)
 });
 
