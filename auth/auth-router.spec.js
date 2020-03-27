@@ -40,7 +40,7 @@ describe('auth-router.js', () => {
         });
     });
   });
-// LOGIN && JOKES TESTS
+// LOGIN TESTS
   describe('login endpoint', () => {
     it('should return 401 when invalid credentials given', () => {
       return request(server)
@@ -56,6 +56,27 @@ describe('auth-router.js', () => {
         .send(registeredUser)
         .then(res => {
           expect(res.body).toHaveProperty("token");
+        });
+    });
+  });
+// JOKES TESTS
+  describe('jokes endpoint', () => {
+    it('should return CONTENT-TYPE as JSON', () => {
+      return request(server)
+        .get('/api/jokes')
+        .expect('CONTENT-TYPE', /json/i);
+    });
+    it('should return a status 200 when logged in user gets jokes', () => {
+      return request(server)
+        .post('/api/auth/login')
+        .send(registeredUser)
+        .then(res => {
+          return request(server)
+            .get('/api/jokes')
+            .set('authorization', res.body.token)
+            .then(res => {
+              expect(res.status).toBe(200);
+            });
         });
     });
   });
